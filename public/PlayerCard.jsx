@@ -1,4 +1,4 @@
-export default function PlayerCard({ player }) {
+export default function PlayerCard({ player,addPlayer }) {
   return (
     <>
       <div className="card bg-base-100 w-[70%] mx-auto shadow-sm">
@@ -14,7 +14,7 @@ export default function PlayerCard({ player }) {
             {player.description}
           </p>
           <div className="card-actions justify-end">
-            <button className="btn btn-primary">Select</button>
+            <button onClick={()=>addPlayer(player)} className="btn btn-primary">Select</button>
           </div>
         </div>
       </div>
