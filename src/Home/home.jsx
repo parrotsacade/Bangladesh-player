@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
 import PlayerCard from "../../public/PlayerCard";
+import toast from "react-hot-toast";
 
 export default function Home() {
-
   const [player, setPlayer] = useState([]);
 
-  const [playerDetails,setPlayerDetails] = useState([])
-  console.log(playerDetails,"playerDetails");
+  const [playerDetails, setPlayerDetails] = useState([]);
+  console.log(playerDetails.length, "playerDetails");
 
-  function addPlayer(details){
-    // console.log(details,"details");
-    const newPlayer = [...playerDetails,details]
-    setPlayerDetails(newPlayer)
+  function addPlayer(details) {
+    console.log(details.id, "details");
+    const isHave = playerDetails.find((p) => p.id === details.id);
+    console.log(isHave);
+    if (isHave) {
+      return toast.error(`${details.name} already exist`);
+    } else {
+      const newPlayer = [...playerDetails, details];
+      setPlayerDetails(newPlayer);
+      toast.success("Player Add Successfully");
+    }
   }
 
-  console.log(player);
+  // console.log(player);
   useEffect(() => {
     fetch("palyer.json")
       .then((res) => res.json())
@@ -32,21 +39,23 @@ export default function Home() {
       <div className="grid grid-cols-10">
         <div className="grid grid-cols-3 col-span-8">
           {player.map((p) => (
-            <PlayerCard player={p} addPlayer={addPlayer} />
+            <PlayerCard player={p} addPlayer={addPlayer} key={p.id} />
           ))}
         </div>
         <div className="col-span-2">
-          <h1 className="text-center text-white bg-purple-600 px-2 rounded-md font-medium mb-5">Selected Player</h1>
-            <div>
-              {
-                playerDetails.map((p)=><>
+          <h1 className="text-center text-white bg-purple-600 px-2 rounded-md font-medium mb-5">
+            Selected Player
+          </h1>
+          <div>
+            {playerDetails.map((p) => (
+              <>
                 <div className="flex items-center gap-0.5">
                   <img src={p.img} alt="playerimage" className="w-10 h-10" />
                   <p>{p.name}</p>
                 </div>
-                </>)
-              }
-            </div>
+              </>
+            ))}
+          </div>
         </div>
       </div>
     </>
